@@ -220,5 +220,26 @@ class FacebookApi {
             echo "reply comment via facebook messenger error: " . $e -> getMessage();
         }
     }
+
+    /**
+     * 建立相簿,  publish_actions and user_photos permission
+     * 
+     * @param $accessToken
+     * @param $sourceId
+     * @param $albumName
+     *
+     * @return array
+     */
+    public function createAlbum($accessToken, $sourceId, $albumName) {
+        try {
+            $graphApi = "/$sourceId/albums";
+            $postFields = array('name' => $albumName);
+            $response = $this -> fbClient -> post($graphApi, $postFields, $accessToken);
+            return $response -> getGraphNode() -> asArray();
+        }
+        catch(Exception $e) {
+            echo "create album error: " . $e -> getMessage();
+        }
+    }
 }
 ?>
