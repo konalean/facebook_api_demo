@@ -51,6 +51,22 @@ class FacebookApi {
         return $redirectLoginHelper -> getLoginUrl($returnUrl, $permissions);
     }
 
+    /**
+     * 取得accessToken
+     * 
+     * @return string
+     */
+    public function getAccessToken() {
+        $helper = $this -> fbClient -> getRedirectLoginHelper();
+        $accessToken = $helper -> getAccessToken();
+        if($accessToken=='') {
+            $helper = $this -> fbClient -> getCanvasHelper();
+            $accessToken = $helper -> getAccessToken();
+        }
+
+        return $accessToken -> getValue();
+    }
+
 
     /**
      * 取得自己相關資料, fields: accounts(取得粉絲團), groups(取得社團)
@@ -185,7 +201,7 @@ class FacebookApi {
     }
 
     /**
-     * 透過facebook messenger, 回覆comment id訊息, permission: read_page_mailboxes
+     * 透過facebook messenger, 回覆comment id訊息, permission: read_page_mailboxes  (目前只有粉絲團有此功能)
      * 
      * @param $accessToken 粉絲團必須是粉絲團的accessToken
      * @param $commentId
