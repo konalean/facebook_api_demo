@@ -1,9 +1,14 @@
 <?php  
+namespace net\kon;
+
 require_once __DIR__ . '/../Facebook/autoload.php';
+require_once __DIR__ . '/Exceptions/ApiException.php';
 
 use Facebook\Facebook;
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
+
+use net\kon\exceptions\ApiException;
 
 
 
@@ -239,7 +244,47 @@ class FacebookApi {
         }
         catch(Exception $e) {
             echo "create album error: " . $e -> getMessage();
+
         }
     }
+
+    /**
+     * 上傳圖片到相本
+     * 
+     * @param $accessToken
+     * @param $albumId
+     * @param $photoPathOrUrl
+     * @param $message
+     *
+     * @return array
+     */
+    public function uploadPhotoToAlbum($accessToken, $albumId, $photoPathOrUrl, $message) {
+        $pathData = parse_url($photoPathOrUrl);
+        $scheme = $pathData['scheme'];
+        $host = $pathData['host'];
+        $path = $pathData['path'];
+        if(($scheme!='http' && $scheme!='https') || $host=='') {
+            if(!file_exists($photoPathOrUrl)) {
+                $errCode = ApiException::$FILE_NOT_EXIST;
+                $errMsg = ApiException::$ERROR_MESSAGE[$errCode];
+                throw new ApiException($errMsg, $errCode);
+            }
+        }
+
+        try {
+            $uploadData = [
+                'message' => $message,
+                'source' => $this -> fbClient -> fileToUpload($photoPathOrUrl),
+            ];
+
+            $response = $this -> fbClient -> post("/$albumId/photos", $uploadData, $accessToken);
+            return $response -> getGraphNode() -> asArray();
+        }
+        catch(Exception $e) {
+            echo "upload photo to album error: " . $e -> getMessage();
+        }
+    }
+
+
 }
 ?>
