@@ -257,6 +257,8 @@ class FacebookApi {
      * @param $message
      *
      * @return array
+     *
+     * @throws ApiException
      */
     public function uploadPhotoToAlbum($accessToken, $albumId, $photoPathOrUrl, $message) {
         $pathData = parse_url($photoPathOrUrl);
