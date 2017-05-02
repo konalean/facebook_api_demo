@@ -227,6 +227,25 @@ class FacebookApi {
     }
 
     /**
+     * 取得使用者的所有相本
+     * 
+     * @param $accessToken 
+     * @param $sourceId
+     *
+     * @return array
+     */
+    public function queryAlbums($accessToken, $sourceId) {
+        try {
+            $graphApi = "/$sourceId/albums"
+            $response = $this -> fbClient -> get($graphApi, $accessToken);
+            return $response -> getGraphNode() -> asArray();
+        }
+        catch(Exception $e) {
+            echo "query albums returned an error: " . $e -> getMessage();
+        }
+    }
+
+    /**
      * 建立相簿,  publish_actions and user_photos permission
      * 
      * @param $accessToken
