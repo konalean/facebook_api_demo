@@ -1,4 +1,6 @@
 <?php 
+require_once __DIR__ . '/../inc/autoload.php';
+
 date_default_timezone_set('Asia/Taipei');
 $facebookAppId = '';
 $facebookSecret = '';

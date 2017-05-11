@@ -2,7 +2,6 @@
 namespace net\kon;
 
 require_once __DIR__ . '/../Facebook/autoload.php';
-require_once __DIR__ . '/Exceptions/ApiException.php';
 
 use Facebook\Facebook;
 use Facebook\Exceptions\FacebookResponseException;
@@ -236,7 +235,7 @@ class FacebookApi {
      */
     public function queryAlbums($accessToken, $sourceId) {
         try {
-            $graphApi = "/$sourceId/albums"
+            $graphApi = "/$sourceId/albums";
             $response = $this -> fbClient -> get($graphApi, $accessToken);
             return $response -> getGraphNode() -> asArray();
         }
